@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-11-22T21:12:20.056Z",
+  "totalBancas": 0,
+  "bancas": [],
+  "testResults": [],
+  "summary": {
+    "bancasComEstados": 0,
+    "bancasSemEstado": 0,
+    "mediaEstadosPorBanca": null
+  }
+}

@@ -1,0 +1,861 @@
+{
+  "timestamp": "2025-11-22T19:33:14.744Z",
+  "testDate": "20/11/2025",
+  "totalTested": 4,
+  "successful": 1,
+  "results": [
+    {
+      "banca": "maluca",
+      "estado": "bahia",
+      "date": "20/11/2025",
+      "url": "https://www.resultadofacil.com.br/resultados-maluca-bahia-do-dia-2025-11-20",
+      "prizes": [
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "e outras datas",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "×    Resultado\tJogo do Bicho MALUCA Bahia do dia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "teste",
+          "source": "text_pattern"
+        },
+        {
+          "position": "70",
+          "number": "3509",
+          "animal": "Cobra",
+          "source": "text_pattern"
+        },
+        {
+          "position": "34",
+          "number": "8923",
+          "animal": "Urso",
+          "source": "text_pattern"
+        },
+        {
+          "position": "96",
+          "number": "3309",
+          "animal": "Cobra",
+          "source": "text_pattern"
+        },
+        {
+          "position": "80",
+          "number": "8822",
+          "animal": "Tigre",
+          "source": "text_pattern"
+        },
+        {
+          "position": "08",
+          "number": "4311",
+          "animal": "Cavalo",
+          "source": "text_pattern"
+        },
+        {
+          "position": "84",
+          "number": "0802",
+          "animal": "Águia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "17",
+          "number": "2807",
+          "animal": "Carneiro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "16",
+          "number": "3710",
+          "animal": "Coelho",
+          "source": "text_pattern"
+        },
+        {
+          "position": "27",
+          "number": "5614",
+          "animal": "Gato",
+          "source": "text_pattern"
+        },
+        {
+          "position": "40",
+          "number": "2807",
+          "animal": "Carneiro   Este foi o resultado do primeiro horário da MALUCA Bahia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "70",
+          "number": "0101",
+          "animal": "Avestruz",
+          "source": "text_pattern"
+        },
+        {
+          "position": "16",
+          "number": "9925",
+          "animal": "Vaca",
+          "source": "text_pattern"
+        },
+        {
+          "position": "79",
+          "number": "1103",
+          "animal": "Burro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "47",
+          "number": "1805",
+          "animal": "Cachorro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "87",
+          "number": "5815",
+          "animal": "Jacaré",
+          "source": "text_pattern"
+        },
+        {
+          "position": "12",
+          "number": "4010",
+          "animal": "Coelho",
+          "source": "text_pattern"
+        },
+        {
+          "position": "48",
+          "number": "3910",
+          "animal": "Coelho",
+          "source": "text_pattern"
+        },
+        {
+          "position": "10",
+          "number": "1003",
+          "animal": "Burro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "63",
+          "number": "4913",
+          "animal": "Galo",
+          "source": "text_pattern"
+        },
+        {
+          "position": "09",
+          "number": "3810",
+          "animal": "Coelho   o segundo resultado da MALUCA Bahia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "67",
+          "number": "2607",
+          "animal": "Carneiro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "37",
+          "number": "9925",
+          "animal": "Vaca",
+          "source": "text_pattern"
+        },
+        {
+          "position": "06",
+          "number": "6717",
+          "animal": "Macaco",
+          "source": "text_pattern"
+        },
+        {
+          "position": "52",
+          "number": "5414",
+          "animal": "Gato",
+          "source": "text_pattern"
+        },
+        {
+          "position": "78",
+          "number": "0903",
+          "animal": "Burro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "00",
+          "number": "7720",
+          "animal": "Peru",
+          "source": "text_pattern"
+        },
+        {
+          "position": "44",
+          "number": "6918",
+          "animal": "Porco",
+          "source": "text_pattern"
+        },
+        {
+          "position": "13",
+          "number": "2106",
+          "animal": "Cabra",
+          "source": "text_pattern"
+        },
+        {
+          "position": "33",
+          "number": "1604",
+          "animal": "Borboleta",
+          "source": "text_pattern"
+        },
+        {
+          "position": "47",
+          "number": "4311",
+          "animal": "Cavalo   você conferiu o sorteio da MALUCA Bahia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "79",
+          "number": "7820",
+          "animal": "Peru",
+          "source": "text_pattern"
+        },
+        {
+          "position": "68",
+          "number": "0025",
+          "animal": "Vaca",
+          "source": "text_pattern"
+        },
+        {
+          "position": "35",
+          "number": "5414",
+          "animal": "Gato",
+          "source": "text_pattern"
+        },
+        {
+          "position": "07",
+          "number": "8722",
+          "animal": "Tigre",
+          "source": "text_pattern"
+        },
+        {
+          "position": "59",
+          "number": "0702",
+          "animal": "Águia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "79",
+          "number": "8221",
+          "animal": "Touro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "91",
+          "number": "3710",
+          "animal": "Coelho",
+          "source": "text_pattern"
+        },
+        {
+          "position": "93",
+          "number": "9624",
+          "animal": "Veado",
+          "source": "text_pattern"
+        },
+        {
+          "position": "15",
+          "number": "6015",
+          "animal": "Jacaré",
+          "source": "text_pattern"
+        },
+        {
+          "position": "35",
+          "number": "7820",
+          "animal": "Peru",
+          "source": "text_pattern"
+        },
+        {
+          "position": "93",
+          "number": "6517",
+          "animal": "Macaco",
+          "source": "text_pattern"
+        },
+        {
+          "position": "63",
+          "number": "2807",
+          "animal": "Carneiro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "46",
+          "number": "6015",
+          "animal": "Jacaré",
+          "source": "text_pattern"
+        },
+        {
+          "position": "52",
+          "number": "2206",
+          "animal": "Cabra",
+          "source": "text_pattern"
+        },
+        {
+          "position": "81",
+          "number": "5715",
+          "animal": "Jacaré",
+          "source": "text_pattern"
+        },
+        {
+          "position": "40",
+          "number": "2807",
+          "animal": "Carneiro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "35",
+          "number": "4812",
+          "animal": "Elefante",
+          "source": "text_pattern"
+        },
+        {
+          "position": "75",
+          "number": "4913",
+          "animal": "Galo",
+          "source": "text_pattern"
+        },
+        {
+          "position": "85",
+          "number": "4712",
+          "animal": "Elefante",
+          "source": "text_pattern"
+        },
+        {
+          "position": "82",
+          "number": "4411",
+          "animal": "Cavalo   Resultado da MALUCA Bahia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Você acabou de conferir os Resultados da MALUCA Bahia do dia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Terça",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Segunda",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Domingo",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Sábado",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Sexta",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Quinta",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Quarta",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Terça",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Segunda",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "OU    Resultados por banca",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado do dia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "da banca MALUCA Bahia Resultado do jogo do bicho da banca MALUCA Bahia do dia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Política de Privacidade",
+          "source": "text_pattern"
+        }
+      ],
+      "foundResults": true,
+      "error": null
+    }
+  ],
+  "allResults": [
+    {
+      "banca": "maluca",
+      "estado": "bahia",
+      "date": "20/11/2025",
+      "url": "https://www.resultadofacil.com.br/resultados-maluca-bahia-do-dia-2025-11-20",
+      "prizes": [
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "e outras datas",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "×    Resultado\tJogo do Bicho MALUCA Bahia do dia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "teste",
+          "source": "text_pattern"
+        },
+        {
+          "position": "70",
+          "number": "3509",
+          "animal": "Cobra",
+          "source": "text_pattern"
+        },
+        {
+          "position": "34",
+          "number": "8923",
+          "animal": "Urso",
+          "source": "text_pattern"
+        },
+        {
+          "position": "96",
+          "number": "3309",
+          "animal": "Cobra",
+          "source": "text_pattern"
+        },
+        {
+          "position": "80",
+          "number": "8822",
+          "animal": "Tigre",
+          "source": "text_pattern"
+        },
+        {
+          "position": "08",
+          "number": "4311",
+          "animal": "Cavalo",
+          "source": "text_pattern"
+        },
+        {
+          "position": "84",
+          "number": "0802",
+          "animal": "Águia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "17",
+          "number": "2807",
+          "animal": "Carneiro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "16",
+          "number": "3710",
+          "animal": "Coelho",
+          "source": "text_pattern"
+        },
+        {
+          "position": "27",
+          "number": "5614",
+          "animal": "Gato",
+          "source": "text_pattern"
+        },
+        {
+          "position": "40",
+          "number": "2807",
+          "animal": "Carneiro   Este foi o resultado do primeiro horário da MALUCA Bahia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "70",
+          "number": "0101",
+          "animal": "Avestruz",
+          "source": "text_pattern"
+        },
+        {
+          "position": "16",
+          "number": "9925",
+          "animal": "Vaca",
+          "source": "text_pattern"
+        },
+        {
+          "position": "79",
+          "number": "1103",
+          "animal": "Burro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "47",
+          "number": "1805",
+          "animal": "Cachorro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "87",
+          "number": "5815",
+          "animal": "Jacaré",
+          "source": "text_pattern"
+        },
+        {
+          "position": "12",
+          "number": "4010",
+          "animal": "Coelho",
+          "source": "text_pattern"
+        },
+        {
+          "position": "48",
+          "number": "3910",
+          "animal": "Coelho",
+          "source": "text_pattern"
+        },
+        {
+          "position": "10",
+          "number": "1003",
+          "animal": "Burro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "63",
+          "number": "4913",
+          "animal": "Galo",
+          "source": "text_pattern"
+        },
+        {
+          "position": "09",
+          "number": "3810",
+          "animal": "Coelho   o segundo resultado da MALUCA Bahia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "67",
+          "number": "2607",
+          "animal": "Carneiro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "37",
+          "number": "9925",
+          "animal": "Vaca",
+          "source": "text_pattern"
+        },
+        {
+          "position": "06",
+          "number": "6717",
+          "animal": "Macaco",
+          "source": "text_pattern"
+        },
+        {
+          "position": "52",
+          "number": "5414",
+          "animal": "Gato",
+          "source": "text_pattern"
+        },
+        {
+          "position": "78",
+          "number": "0903",
+          "animal": "Burro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "00",
+          "number": "7720",
+          "animal": "Peru",
+          "source": "text_pattern"
+        },
+        {
+          "position": "44",
+          "number": "6918",
+          "animal": "Porco",
+          "source": "text_pattern"
+        },
+        {
+          "position": "13",
+          "number": "2106",
+          "animal": "Cabra",
+          "source": "text_pattern"
+        },
+        {
+          "position": "33",
+          "number": "1604",
+          "animal": "Borboleta",
+          "source": "text_pattern"
+        },
+        {
+          "position": "47",
+          "number": "4311",
+          "animal": "Cavalo   você conferiu o sorteio da MALUCA Bahia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "79",
+          "number": "7820",
+          "animal": "Peru",
+          "source": "text_pattern"
+        },
+        {
+          "position": "68",
+          "number": "0025",
+          "animal": "Vaca",
+          "source": "text_pattern"
+        },
+        {
+          "position": "35",
+          "number": "5414",
+          "animal": "Gato",
+          "source": "text_pattern"
+        },
+        {
+          "position": "07",
+          "number": "8722",
+          "animal": "Tigre",
+          "source": "text_pattern"
+        },
+        {
+          "position": "59",
+          "number": "0702",
+          "animal": "Águia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "79",
+          "number": "8221",
+          "animal": "Touro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "91",
+          "number": "3710",
+          "animal": "Coelho",
+          "source": "text_pattern"
+        },
+        {
+          "position": "93",
+          "number": "9624",
+          "animal": "Veado",
+          "source": "text_pattern"
+        },
+        {
+          "position": "15",
+          "number": "6015",
+          "animal": "Jacaré",
+          "source": "text_pattern"
+        },
+        {
+          "position": "35",
+          "number": "7820",
+          "animal": "Peru",
+          "source": "text_pattern"
+        },
+        {
+          "position": "93",
+          "number": "6517",
+          "animal": "Macaco",
+          "source": "text_pattern"
+        },
+        {
+          "position": "63",
+          "number": "2807",
+          "animal": "Carneiro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "46",
+          "number": "6015",
+          "animal": "Jacaré",
+          "source": "text_pattern"
+        },
+        {
+          "position": "52",
+          "number": "2206",
+          "animal": "Cabra",
+          "source": "text_pattern"
+        },
+        {
+          "position": "81",
+          "number": "5715",
+          "animal": "Jacaré",
+          "source": "text_pattern"
+        },
+        {
+          "position": "40",
+          "number": "2807",
+          "animal": "Carneiro",
+          "source": "text_pattern"
+        },
+        {
+          "position": "35",
+          "number": "4812",
+          "animal": "Elefante",
+          "source": "text_pattern"
+        },
+        {
+          "position": "75",
+          "number": "4913",
+          "animal": "Galo",
+          "source": "text_pattern"
+        },
+        {
+          "position": "85",
+          "number": "4712",
+          "animal": "Elefante",
+          "source": "text_pattern"
+        },
+        {
+          "position": "82",
+          "number": "4411",
+          "animal": "Cavalo   Resultado da MALUCA Bahia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Você acabou de conferir os Resultados da MALUCA Bahia do dia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Terça",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Segunda",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Domingo",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Sábado",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Sexta",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Quinta",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Quarta",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Terça",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado MALUCA Bahia de Segunda",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "OU    Resultados por banca",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Resultado do dia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "da banca MALUCA Bahia Resultado do jogo do bicho da banca MALUCA Bahia do dia",
+          "source": "text_pattern"
+        },
+        {
+          "position": "2",
+          "number": "025",
+          "animal": "Política de Privacidade",
+          "source": "text_pattern"
+        }
+      ],
+      "foundResults": true,
+      "error": null
+    },
+    {
+      "banca": "paratodos",
+      "estado": "rio",
+      "date": "20/11/2025",
+      "url": "https://www.resultadofacil.com.br/resultados-paratodos-rio-do-dia-2025-11-20",
+      "prizes": [],
+      "foundResults": false,
+      "error": null
+    },
+    {
+      "banca": "federal",
+      "estado": "sao-paulo",
+      "date": "20/11/2025",
+      "url": "https://www.resultadofacil.com.br/resultados-federal-sao-paulo-do-dia-2025-11-20",
+      "prizes": [],
+      "foundResults": false,
+      "error": null
+    },
+    {
+      "banca": "corujinha",
+      "estado": "minas",
+      "date": "20/11/2025",
+      "url": "https://www.resultadofacil.com.br/resultados-corujinha-minas-do-dia-2025-11-20",
+      "prizes": [],
+      "foundResults": false,
+      "error": null
+    }
+  ]
+}

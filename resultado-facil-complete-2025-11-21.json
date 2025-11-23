@@ -1,0 +1,82 @@
+{
+  "date": "2025-11-21T19:26:53.462Z",
+  "timestamp": "2025-11-22T19:27:45.959Z",
+  "totalCombinations": 8,
+  "successfulScrapes": 0,
+  "failedScrapes": 0,
+  "results": [],
+  "allAttempts": [
+    {
+      "banca": "maluca",
+      "estado": "bahia",
+      "date": "2025-11-21T19:26:53.462Z",
+      "url": "https://www.resultadofacil.com.br/resultados-maluca-bahia-do-dia-2025-11-21",
+      "prizes": [],
+      "foundResults": false,
+      "error": "row.some is not a function"
+    },
+    {
+      "banca": "paratodos",
+      "estado": "rio",
+      "date": "2025-11-21T19:26:53.462Z",
+      "url": "https://www.resultadofacil.com.br/resultados-paratodos-rio-do-dia-2025-11-21",
+      "prizes": [],
+      "foundResults": false,
+      "error": null
+    },
+    {
+      "banca": "federal",
+      "estado": "sao-paulo",
+      "date": "2025-11-21T19:26:53.462Z",
+      "url": "https://www.resultadofacil.com.br/resultados-federal-sao-paulo-do-dia-2025-11-21",
+      "prizes": [],
+      "foundResults": false,
+      "error": null
+    },
+    {
+      "banca": "corujinha",
+      "estado": "minas",
+      "date": "2025-11-21T19:26:53.462Z",
+      "url": "https://www.resultadofacil.com.br/resultados-corujinha-minas-do-dia-2025-11-21",
+      "prizes": [],
+      "foundResults": false,
+      "error": null
+    },
+    {
+      "banca": "maluca",
+      "estado": "rio",
+      "date": "2025-11-21T19:26:53.462Z",
+      "url": "https://www.resultadofacil.com.br/resultados-maluca-rio-do-dia-2025-11-21",
+      "prizes": [],
+      "foundResults": false,
+      "error": null
+    },
+    {
+      "banca": "paratodos",
+      "estado": "bahia",
+      "date": "2025-11-21T19:26:53.462Z",
+      "url": "https://www.resultadofacil.com.br/resultados-paratodos-bahia-do-dia-2025-11-21",
+      "prizes": [],
+      "foundResults": false,
+      "error": "row.some is not a function"
+    },
+    {
+      "banca": "federal",
+      "estado": "rio",
+      "date": "2025-11-21T19:26:53.462Z",
+      "url": "https://www.resultadofacil.com.br/resultados-federal-rio-do-dia-2025-11-21",
+      "prizes": [],
+      "foundResults": false,
+      "error": null
+    },
+    {
+      "banca": "galo",
+      "estado": "sao-paulo",
+      "date": "2025-11-21T19:26:53.462Z",
+      "url": "https://www.resultadofacil.com.br/resultados-galo-sao-paulo-do-dia-2025-11-21",
+      "prizes": [],
+      "foundResults": false,
+      "error": null
+    }
+  ]
+}
