@@ -2,6 +2,7 @@ import * as cheerio from 'cheerio';
 import { LotteryResult, LotteryType } from '../types';
 import { logger } from '../utils/logger';
 import { BaseScraper } from './BaseScraper';
+import { proxyManager } from '../utils/proxyManager';
 
 export class MultiSourceScraper extends BaseScraper {
   private sources = [
@@ -68,7 +69,7 @@ export class MultiSourceScraper extends BaseScraper {
           if (numbers.length >= 3) {
             const result: LotteryResult = {
               lotteryType: mapping.type,
-              date: this.getYesterdayDate(),
+              date: new Date().toISOString().split('T')[0],
               results: {
                 first: numbers[0] || '',
                 second: numbers[1] || '',
@@ -116,7 +117,7 @@ export class MultiSourceScraper extends BaseScraper {
             if (numbers.length >= 3) {
               const result: LotteryResult = {
                 lotteryType: pattern.type,
-                date: this.getYesterdayDate(),
+                date: new Date().toISOString().split('T')[0],
                 results: {
                   first: numbers[0] || '',
                   second: numbers[1] || '',
@@ -146,60 +147,169 @@ export class MultiSourceScraper extends BaseScraper {
     for (const source of this.sources) {
       try {
         logger.info(`🔄 Tentando fonte: ${source.name}`);
-        // Aqui seria integrado com o proxy manager
-        // Por enquanto, retorna resultados simulados para demonstração
         
-        const mockResults = this.generateMockResults();
-        mockResults.forEach((result, type) => {
-          if (!allResults.has(type)) {
-            allResults.set(type, result);
-          }
-        });
+        // Usar proxy manager para obter resultados reais
+        const proxy = proxyManager.getNextProxy();
+        const axios = proxyManager.getAxiosInstance(proxy || undefined);
+        
+        logger.info(`📡 Acessando: ${source.url} com proxy: ${proxy || 'sem proxy'}`);
+        
+        const response = await axios.get(source.url);
+        
+        if (response.status === 200) {
+          logger.info(`✅ Sucesso ao acessar ${source.name}`);
+          
+          // Processar HTML real
+          const results = this.processRealSource(response.data, source);
+          results.forEach((result, type) => {
+            if (!allResults.has(type)) {
+              allResults.set(type, result);
+            }
+          });
+        }
         
       } catch (error) {
-        logger.error(`❌ Erro na fonte ${source.name}:`, error);
+        logger.error(`❌ Erro na fonte ${source.name}:`, error.message);
       }
     }
     
     return allResults;
   }
-
-  private generateMockResults(): Map<LotteryType, LotteryResult> {
+  
+  private processRealSource(html: string, source: any): Map<LotteryType, LotteryResult> {
     const results = new Map<LotteryType, LotteryResult>();
-    const yesterday = this.getYesterdayDate();
+    const $ = cheerio.load(html);
+    const today = new Date().toISOString().split('T')[0];
     
-    // Gera resultados simulados para demonstração
-    const mockData = [
-      { type: LotteryType.FEDERAL, name: 'Federal', numbers: ['1234', '5678', '9012', '3456', '7890'] },
-      { type: LotteryType.RIO_DE_JANEIRO, name: 'Rio de Janeiro', numbers: ['2345', '6789', '0123', '4567', '8901'] },
-      { type: LotteryType.LOOK_GO, name: 'Look GO', numbers: ['3456', '7890', '1234', '5678', '9012'] },
-      { type: LotteryType.PT_SP, name: 'PT São Paulo', numbers: ['4567', '8901', '2345', '6789', '0123'] },
-      { type: LotteryType.NACIONAL, name: 'Nacional', numbers: ['5678', '9012', '3456', '7890', '1234'] },
-      { type: LotteryType.MALUQUINHA_RJ, name: 'Maluquinha RJ', numbers: ['6789', '0123', '4567', '8901', '2345'] },
-      { type: LotteryType.LOTEP, name: 'LOTEP', numbers: ['7890', '1234', '5678', '9012', '3456'] },
-      { type: LotteryType.LOTECE, name: 'LOTECE', numbers: ['8901', '2345', '6789', '0123', '4567'] },
-      { type: LotteryType.MINAS_GERAIS, name: 'Minas Gerais', numbers: ['9012', '3456', '7890', '1234', '5678'] },
-      { type: LotteryType.BOA_SORTE, name: 'Boa Sorte', numbers: ['0123', '4567', '8901', '2345', '6789'] }
-    ];
-
-    mockData.forEach(data => {
-      const result: LotteryResult = {
-        lotteryType: data.type,
-        date: yesterday,
-        results: {
-          first: data.numbers[0],
-          second: data.numbers[1],
-          third: data.numbers[2],
-          fourth: data.numbers[3],
-          fifth: data.numbers[4]
-        },
-        source: 'Multi Fonte Scraper',
-        status: 'active'
-      };
+    try {
+      // Processar cada tipo de loteria baseado na fonte
+      if (source.name === 'Jogo do Bicho.net') {
+        this.extractFromJogoDoBichoNetReal($, results, today);
+      } else if (source.name === 'Resultados Hoje') {
+        this.extractFromResultadosHojeReal($, results, today);
+      } else if (source.name === 'Loterias Caixa') {
+        this.extractFromLoteriasCaixaReal($, results, today);
+      }
       
-      results.set(data.type, result);
-    });
-
+    } catch (error) {
+      logger.error(`Erro ao processar fonte ${source.name}:`, error);
+    }
+    
     return results;
   }
+  
+  private extractFromJogoDoBichoNetReal($: cheerio.Root, results: Map<LotteryType, LotteryResult>, today: string) {
+    // Extrair resultados reais do Jogo do Bicho.net
+    const resultElements = $('.result-numbers, .resultado, .numeros');
+    
+    resultElements.each((i, element) => {
+      const text = $(element).text();
+      const numbers = this.extractNumbers(text);
+      
+      if (numbers.length >= 3) {
+        // Detectar tipo de loteria pelo contexto
+        const lotteryType = this.detectLotteryTypeFromContext(text);
+        
+        if (lotteryType) {
+          const result: LotteryResult = {
+            lotteryType,
+            date: today,
+            results: {
+              first: numbers[0] || '',
+              second: numbers[1] || '',
+              third: numbers[2] || '',
+              fourth: numbers[3] || '',
+              fifth: numbers[4] || ''
+            },
+            source: 'jogodobicho.net',
+            status: 'active'
+          };
+          
+          results.set(lotteryType, result);
+          logger.info(`✅ Extraído real ${lotteryType}: ${numbers.join(', ')}`);
+        }
+      }
+    });
+  }
+  
+  private extractFromResultadosHojeReal($: cheerio.Root, results: Map<LotteryType, LotteryResult>, today: string) {
+    // Extrair resultados reais do Resultados Hoje
+    const sections = $('.result-section, .lottery-result');
+    
+    sections.each((i, element) => {
+      const text = $(element).text();
+      const numbers = this.extractNumbers(text);
+      
+      if (numbers.length >= 3) {
+        const lotteryType = this.detectLotteryTypeFromContext(text);
+        
+        if (lotteryType) {
+          const result: LotteryResult = {
+            lotteryType,
+            date: today,
+            results: {
+              first: numbers[0] || '',
+              second: numbers[1] || '',
+              third: numbers[2] || '',
+              fourth: numbers[3] || '',
+              fifth: numbers[4] || ''
+            },
+            source: 'resultadoshoje.com.br',
+            status: 'active'
+          };
+          
+          results.set(lotteryType, result);
+          logger.info(`✅ Extraído real ${lotteryType}: ${numbers.join(', ')}`);
+        }
+      }
+    });
+  }
+  
+  private extractFromLoteriasCaixaReal($: cheerio.Root, results: Map<LotteryType, LotteryResult>, today: string) {
+    // Extrair resultados reais das Loterias Caixa
+    const federalResults = $('.federal-result, .resultado-federal');
+    
+    federalResults.each((i, element) => {
+      const text = $(element).text();
+      const numbers = this.extractNumbers(text);
+      
+      if (numbers.length >= 5) {
+        const result: LotteryResult = {
+          lotteryType: LotteryType.FEDERAL,
+          date: today,
+          results: {
+            first: numbers[0] || '',
+            second: numbers[1] || '',
+            third: numbers[2] || '',
+            fourth: numbers[3] || '',
+            fifth: numbers[4] || ''
+          },
+          source: 'loterias.caixa.gov.br',
+          status: 'active'
+        };
+        
+        results.set(LotteryType.FEDERAL, result);
+        logger.info(`✅ Extraído real FEDERAL: ${numbers.join(', ')}`);
+      }
+    });
+  }
+  
+  private detectLotteryTypeFromContext(text: string): LotteryType | null {
+    const lowerText = text.toLowerCase();
+    
+    if (lowerText.includes('rio') || lowerText.includes('rj')) return LotteryType.RIO_DE_JANEIRO;
+    if (lowerText.includes('são paulo') || lowerText.includes('sp')) return LotteryType.PT_SP;
+    if (lowerText.includes('federal')) return LotteryType.FEDERAL;
+    if (lowerText.includes('minas') || lowerText.includes('mg')) return LotteryType.MINAS_GERAIS;
+    if (lowerText.includes('look') || lowerText.includes('go')) return LotteryType.LOOK_GO;
+    if (lowerText.includes('nacional')) return LotteryType.NACIONAL;
+    if (lowerText.includes('maluquinha')) return LotteryType.MALUQUINHA_RJ;
+    if (lowerText.includes('lotep')) return LotteryType.LOTEP;
+    if (lowerText.includes('lotece')) return LotteryType.LOTECE;
+    if (lowerText.includes('boa sorte')) return LotteryType.BOA_SORTE;
+    
+    return null;
+  }
+
+
 }

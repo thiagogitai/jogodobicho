@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
-import { DateUtils } from '../utils/DateUtils.js';
-import { ScrapingResult, LotteryPrize } from '../types/index';
+import { DateUtils } from '../utils/DateUtils';
+import { ScrapingResult, LotteryPrize } from '../types';
 
 export class SimpleResultadoFacilScraper {
   
@@ -137,14 +137,4 @@ export class SimpleResultadoFacilScraper {
       return false;
     }
   }
-}
-
-// Teste rápido
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const scraper = new SimpleResultadoFacilScraper();
-  scraper.scrapeResultadoFacil().then(results => {
-    console.log(`\n✅ Teste concluído! ${results.length} resultados encontrados`);
-  }).catch(error => {
-    console.error('❌ Erro no teste:', error);
-  });
 }

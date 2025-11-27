@@ -1,10 +1,10 @@
-import { ResultadoFacilDefinitiveScraper } from './src/scrapers/ResultadoFacilDefinitiveScraper';
+import { ResultadoFacilDefinitivoScraper } from './src/scrapers/ResultadoFacilDefinitivoScraper';
 import { DateUtils } from './src/utils/DateUtils';
 
 async function testAllResultadoFacilLinks() {
   console.log('🚀 Iniciando teste do Resultado Fácil Definitivo Scraper...\n');
   
-  const scraper = new ResultadoFacilDefinitiveScraper();
+  const scraper = new ResultadoFacilDefinitivoScraper();
   const yesterday = DateUtils.getYesterdayDate();
   
   console.log(`📅 Data de ontem: ${yesterday}\n`);
@@ -38,47 +38,14 @@ async function testAllResultadoFacilLinks() {
   let successCount = 0;
   let errorCount = 0;
   
-  for (const banca of bancas) {
-    console.log(`🔍 Testando banca: ${banca}`);
-    
-    try {
-      const result = await scraper.scrapeBanca(banca, yesterday);
-      
-      if (result.success && result.data) {
-        console.log(`✅ SUCESSO - ${banca}`);
-        console.log(`   📊 Encontrados ${result.data.results.length} resultados`);
-        console.log(`   🕐 Horário: ${result.data.time}`);
-        console.log(`   📅 Data: ${result.data.date}`);
-        
-        // Mostrar os primeiros 3 resultados como amostra
-        if (result.data.results.length > 0) {
-          console.log('   🏆 Resultados (primeiros 3):');
-          result.data.results.slice(0, 3).forEach((res, index) => {
-            console.log(`      ${index + 1}º: ${res.number} - ${res.animal.name} ${res.animal.emoji}`);
-          });
-          if (result.data.results.length > 3) {
-            console.log(`      ... e mais ${result.data.results.length - 3} resultados`);
-          }
-        }
-        
-        results.push({ banca, success: true, data: result.data });
-        successCount++;
-      } else {
-        console.log(`❌ FALHA - ${banca}: ${result.error}`);
-        results.push({ banca, success: false, error: result.error });
-        errorCount++;
-      }
-      
-    } catch (error) {
-      console.log(`❌ ERRO - ${banca}: ${error.message}`);
-      results.push({ banca, success: false, error: error.message });
-      errorCount++;
-    }
-    
-    console.log(''); // Linha em branco para separar
-    
-    // Pequena pausa entre requisições para não sobrecarregar o servidor
-    await new Promise(resolve => setTimeout(resolve, 1000));
+  try {
+    const extracted = await scraper.scrapeResultadoFacil(yesterday);
+    console.log(`✅ Extração concluída: ${extracted.length} entradas`);
+    results.push(...extracted);
+    successCount = extracted.length;
+  } catch (err: any) {
+    console.log(`❌ Erro na extração: ${err.message || err}`);
+    errorCount = 1;
   }
   
   // Resumo final

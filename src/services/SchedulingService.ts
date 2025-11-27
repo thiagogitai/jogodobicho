@@ -1,10 +1,10 @@
-import { CronJob } from 'cron';
+import cron from 'node-cron';
 import { LotteryType } from '../types';
 import { ScrapeService } from './ScrapeService';
 import { MessageService } from './MessageService';
 import { ResultsService } from './ResultsService';
 import { DatabaseManager } from '../config/database';
-import logger from '../config/logger';
+import { logger } from '../utils/logger';
 
 export interface ScheduleConfig {
   id?: number;
@@ -32,7 +32,7 @@ export interface ScheduleLog {
 }
 
 export class SchedulingService {
-  private jobs: Map<number, CronJob> = new Map();
+  private jobs: Map<number, cron.ScheduledTask> = new Map();
   private scrapeService: ScrapeService;
   private messageService: MessageService;
   private resultsService: ResultsService;
@@ -64,18 +64,18 @@ export class SchedulingService {
 
   async createSchedule(config: ScheduleConfig): Promise<ScheduleConfig> {
     const query = `
-      INSERT INTO schedules (lottery_type, cron_expression, enabled, template_id, group_ids)
+      INSERT INTO schedules (name, cron_expression, enabled, lottery_types, groups)
       VALUES (?, ?, ?, ?, ?)
     `;
     
     const groupIdsJson = config.groupIds ? JSON.stringify(config.groupIds) : null;
     
     const result = await this.db.run(query, [
-      config.lotteryType,
+      config.name || config.lotteryType, // Usar lotteryType como nome se não houver nome
       config.cronExpression,
       config.enabled ? 1 : 0,
-      config.templateId || null,
-      groupIdsJson
+      JSON.stringify([config.lotteryType]), // Converter para array JSON
+      groupIdsJson || '[]'
     ]);
     
     const newSchedule = {
@@ -165,7 +165,7 @@ export class SchedulingService {
   }
 
   async getAllSchedules(): Promise<ScheduleConfig[]> {
-    const query = 'SELECT * FROM schedules ORDER BY lottery_type';
+    const query = 'SELECT * FROM schedules ORDER BY name';
     const rows = await this.db.all(query);
     
     return rows.map(row => this.mapScheduleRow(row));
@@ -200,21 +200,10 @@ export class SchedulingService {
 
   private async startSchedule(schedule: ScheduleConfig): Promise<void> {
     try {
-      const job = new CronJob(
-        schedule.cronExpression,
-        async () => {
-          await this.executeSchedule(schedule);
-        },
-        null,
-        true,
-        'America/Sao_Paulo'
-      );
-      
+      const job = cron.schedule(schedule.cronExpression, async () => {
+        await this.executeSchedule(schedule);
+      }, { timezone: 'America/Sao_Paulo' });
       this.jobs.set(schedule.id!, job);
-      
-      const nextRun = job.nextDate().toDate();
-      await this.updateNextRun(schedule.id!, nextRun);
-      
       logger.info(`Started schedule ${schedule.id} for ${schedule.lotteryType}`);
     } catch (error) {
       logger.error(`Failed to start schedule ${schedule.id}:`, error);
@@ -276,11 +265,7 @@ export class SchedulingService {
       );
       
       // Update next run time
-      const job = this.jobs.get(schedule.id!);
-      if (job) {
-        const nextRun = job.nextDate().toDate();
-        await this.updateNextRun(schedule.id!, nextRun);
-      }
+      // node-cron não fornece próxima execução nativamente
       
     } catch (error) {
       const executionTime = Date.now() - startTime;
@@ -308,13 +293,13 @@ export class SchedulingService {
     errorDetails?: string
   ): Promise<void> {
     const query = `
-      INSERT INTO schedule_logs (schedule_id, lottery_type, status, message, results_count, execution_time, error_details)
+      INSERT INTO schedule_logs (schedule_id, lottery_types, status, message, results_count, execution_time, error_details)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
     
     await this.db.run(query, [
       scheduleId,
-      lotteryType,
+      JSON.stringify([lotteryType]), // Converter para array JSON
       status,
       message,
       resultsCount || 0,
@@ -331,13 +316,15 @@ export class SchedulingService {
   }
 
   private mapScheduleRow(row: any): ScheduleConfig {
+    const lotteryTypes = row.lottery_types ? JSON.parse(row.lottery_types) : [];
     return {
       id: row.id,
-      lotteryType: row.lottery_type,
+      name: row.name,
+      lotteryType: lotteryTypes[0] || '', // Pegar o primeiro tipo como principal
       cronExpression: row.cron_expression,
       enabled: Boolean(row.enabled),
       templateId: row.template_id,
-      groupIds: row.group_ids ? JSON.parse(row.group_ids) : [],
+      groupIds: row.groups ? JSON.parse(row.groups) : [],
       lastRun: row.last_run ? new Date(row.last_run) : undefined,
       nextRun: row.next_run ? new Date(row.next_run) : undefined,
       createdAt: new Date(row.created_at),

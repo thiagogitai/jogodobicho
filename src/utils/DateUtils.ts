@@ -2,18 +2,19 @@ export class DateUtils {
   static getYesterday(): string {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const dateStr = yesterday.toISOString().split('T')[0];
-    return dateStr || new Date().toISOString().split('T')[0];
+    return yesterday.toISOString().substring(0, 10);
+  }
+
+  static getYesterdayDate(): string {
+    return this.getYesterday();
   }
 
   static getToday(): string {
-    const dateStr = new Date().toISOString().split('T')[0];
-    return dateStr || new Date().toISOString().split('T')[0];
+    return new Date().toISOString().substring(0, 10);
   }
 
   static formatDate(date: Date): string {
-    const dateStr = date.toISOString().split('T')[0];
-    return dateStr || new Date().toISOString().split('T')[0];
+    return date.toISOString().substring(0, 10);
   }
 
   static parseDate(dateStr: string): Date {

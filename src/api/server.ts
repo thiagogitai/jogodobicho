@@ -2,6 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import path from 'path';
+import fs from 'fs';
+import * as cheerio from 'cheerio';
+import { scrapeService } from '../services/ScrapeService';
+import { resultsService } from '../services/ResultsService';
+import crypto from 'crypto';
+import { getDatabase } from '../config/database';
 import { DatabaseManager } from '../config/database';
 import { ResultsService } from '../services/ResultsService';
 import { ScrapeService } from '../services/ScrapeService';
@@ -10,17 +17,18 @@ import { TemplateService } from '../services/TemplateService';
 import { MessageService } from '../services/MessageService';
 import { createEvolutionAPIService } from '../services/EvolutionAPIService';
 import { LotteryType } from '../types';
-import logger from '../config/logger';
+import { logger } from '../utils/logger';
 import crypto from 'crypto';
 
 const app = express();
-const PORT = process.env.API_PORT || 3000;
+const PORT = process.env.API_PORT || 3001;
 
 // Middleware de segurança
 app.use(helmet());
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(process.cwd(), 'public')));
 
 // Rate limiting
 const limiter = rateLimit({
@@ -76,6 +84,231 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     version: '1.0.0'
   });
+});
+
+// Página inicial
+app.get('/', (req, res) => {
+  res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
+});
+
+app.get('/web/results', async (req, res) => {
+  try {
+    const { date } = req.query as { date?: string };
+    const results = date
+      ? await resultsService.getResultsByDate(date as string)
+      : await resultsService.getRecentResults(50, 0);
+    res.json(results);
+  } catch (error) {
+    logger.error('Erro ao obter resultados web:', error);
+    res.status(500).json({ error: 'Erro ao obter resultados' });
+  }
+});
+
+app.post('/api/scrape/yesterday-lite', async (req, res) => {
+  try {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    const dateStr = d.toISOString().substring(0, 10);
+    const url = 'https://www.ojogodobicho.com/deu_no_poste.htm';
+    const response = await fetch(url);
+    const html = await response.text();
+    const $ = cheerio.load(html);
+    const nums: string[] = [];
+    $('table').first().find('tr').each((_, tr) => {
+      const text = $(tr).text();
+      const m = text.match(/\b\d{4}\b/g);
+      if (m) nums.push(...m);
+    });
+    const result = {
+      lotteryType: 'DEU_NO_POSTE',
+      date: dateStr,
+      results: {
+        first: nums[0] || null,
+        second: nums[1] || null,
+        third: nums[2] || null,
+        fourth: nums[3] || null,
+        fifth: nums[4] || null
+      },
+      source: url,
+      status: 'active'
+    };
+    const existing = await resultsService.getResultByDateAndType(dateStr, 'DEU_NO_POSTE' as any, true);
+    if (existing && (existing as any).id) {
+      await resultsService.updateResult((existing as any).id, result, true);
+    } else {
+      await resultsService.createResult(result as any);
+    }
+    res.json([result]);
+  } catch (error) {
+    logger.error('Falha no scrap rápido:', error);
+    res.status(500).json({ error: 'Falha no scrap', detail: (error as any)?.message || String(error) });
+  }
+});
+
+app.post('/api/scrape/yesterday-all', async (req, res) => {
+  try {
+    const map = await scrapeService.scrapeYesterdayResults();
+    await resultsService.saveResults(map);
+    const summary = Array.from(map.entries()).map(([type, r]) => ({
+      lotteryType: type,
+      date: r.date,
+      source: r.source,
+    }));
+    res.json({ saved: map.size, items: summary });
+  } catch (error) {
+    logger.error('Falha no scrap de todos os resultados:', error);
+    res.status(500).json({ error: 'Falha no scrap de todos', detail: (error as any)?.message || String(error) });
+  }
+});
+
+// Scrap de hoje (sem autenticação - temporário)
+app.post('/api/scrape/today-all', async (req, res) => {
+  try {
+    const today = new Date().toISOString().substring(0, 10);
+    const map = await scrapeService.scrapeAllResults();
+    await resultsService.saveResults(map);
+    const summary = Array.from(map.entries()).map(([type, r]) => ({
+      lotteryType: type,
+      date: r.date,
+      source: r.source,
+    }));
+    res.json({ saved: map.size, items: summary });
+  } catch (error) {
+    logger.error('Falha no scrap de hoje:', error);
+    res.status(500).json({ error: 'Falha no scrap de hoje', detail: (error as any)?.message || String(error) });
+  }
+});
+
+// Teste individual de sites (sem autenticação - para debug)
+app.post('/api/scrape/test-site', async (req, res) => {
+  try {
+    const { url, name } = req.body;
+    if (!url) return res.status(400).json({ error: 'URL é obrigatória' });
+    
+    logger.info(`🧪 Testando site: ${name || url}`);
+    
+    // Usar proxy manager para testar o site
+    const proxy = proxyManager.getNextProxy();
+    const axios = proxyManager.getAxiosInstance(proxy || undefined);
+    
+    logger.info(`📡 Acessando: ${url} com proxy: ${proxy || 'sem proxy'}`);
+    
+    const response = await axios.get(url);
+    
+    if (response.status === 200) {
+      logger.info(`✅ Sucesso ao acessar ${name || url}`);
+      
+      // Analisar o HTML
+      const $ = cheerio.load(response.data);
+      const bodyText = $('body').text();
+      
+      // Procurar resultados
+      const numbers = bodyText.match(/\b\d{4}\b/g) || [];
+      const dates = bodyText.match(/\d{2}\/\d{2}\/\d{4}/g) || [];
+      const times = bodyText.match(/\d{2}:\d{2}/g) || [];
+      
+      // Detectar se tem resultados de ontem
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = yesterday.toLocaleDateString('pt-BR');
+      const hasYesterdayResults = bodyText.toLowerCase().includes('ontem') || 
+                                   bodyText.includes(yesterdayStr) ||
+                                   dates.some(date => date === yesterdayStr);
+      
+      res.json({
+        success: true,
+        url,
+        name: name || url,
+        resultsFound: numbers.length,
+        numbers: numbers.slice(0, 20), // Primeiros 20 números
+        dates: dates.slice(0, 10), // Primeiras 10 datas
+        times: times.slice(0, 10), // Primeiros 10 horários
+        hasYesterdayResults,
+        htmlSize: response.data.length,
+        preview: bodyText.substring(0, 500) + '...'
+      });
+    } else {
+      res.status(400).json({ 
+        error: 'Site não respondeu corretamente', 
+        status: response.status 
+      });
+    }
+    
+  } catch (error) {
+    logger.error(`❌ Erro ao testar site ${name || url}:`, error);
+    res.status(500).json({ 
+      error: 'Erro ao acessar site', 
+      detail: error.message,
+      url: req.body.url
+    });
+  }
+});
+
+// ===== Setup de schema mínimo =====
+async function ensureSchema() {
+  const db = getDatabase();
+  await db.run(`CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    role TEXT DEFAULT 'user',
+    status TEXT DEFAULT 'active',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`);
+
+  await db.run(`CREATE TABLE IF NOT EXISTS groups (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    platform TEXT NOT NULL,
+    group_id TEXT NOT NULL,
+    instance_name TEXT,
+    enabled INTEGER DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`);
+}
+ensureSchema().catch(() => {});
+
+// ===== Cadastro de usuário simples =====
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    const { name, email, password } = req.body || {};
+    if (!name || !email || !password) return res.status(400).json({ error: 'Campos obrigatórios: name, email, password' });
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+    const password_hash = `${salt}:${hash}`;
+    const db = getDatabase();
+    await db.run('INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)', [name, email, password_hash, 'user']);
+    const row = await db.get('SELECT last_insert_rowid() AS id');
+    res.status(201).json({ id: row.id, name, email });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao registrar usuário' });
+  }
+});
+
+// ===== Grupos simples (cadastro/lista) =====
+app.get('/api/groups/simple', authenticateToken, async (req, res) => {
+  try {
+    const db = getDatabase();
+    const rows = await db.all('SELECT id, name, platform, group_id, instance_name, enabled, created_at FROM groups ORDER BY created_at DESC');
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao listar grupos' });
+  }
+});
+
+app.post('/api/groups/simple', authenticateToken, async (req, res) => {
+  try {
+    const { name, platform, group_id, instance_name, enabled } = req.body || {};
+    if (!name || !platform || !group_id) return res.status(400).json({ error: 'Campos obrigatórios: name, platform, group_id' });
+    const db = getDatabase();
+    await db.run('INSERT INTO groups (name, platform, group_id, instance_name, enabled) VALUES (?, ?, ?, ?, ?)', [name, platform, group_id, instance_name || null, enabled ? 1 : 1]);
+    const row = await db.get('SELECT last_insert_rowid() AS id');
+    res.status(201).json({ id: row.id, name, platform, group_id, instance_name, enabled: !!(enabled ?? 1) });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao cadastrar grupo' });
+  }
 });
 
 // Login/Autenticação inicial (para obter token)
@@ -635,6 +868,33 @@ app.get('/api/tokens', authenticateToken, async (req, res) => {
   } catch (error) {
     logger.error('Erro ao obter tokens:', error);
     res.status(500).json({ error: 'Erro ao obter tokens' });
+  }
+});
+
+app.post('/api/evolution/config', authenticateToken, async (req, res) => {
+  try {
+    const { url, key } = req.body;
+    if (!url || !key) {
+      return res.status(400).json({ error: 'Campos obrigatórios: url, key' });
+    }
+    process.env.EVOLUTION_API_URL = url;
+    process.env.EVOLUTION_API_KEY = key;
+    const envPath = path.join(process.cwd(), '.env');
+    try {
+      let content = '';
+      if (fs.existsSync(envPath)) {
+        content = fs.readFileSync(envPath, 'utf-8');
+      }
+      const lines = content.split(/\r?\n/).filter(Boolean);
+      const filtered = lines.filter(l => !l.startsWith('EVOLUTION_API_URL=') && !l.startsWith('EVOLUTION_API_KEY='));
+      filtered.push(`EVOLUTION_API_URL=${url}`);
+      filtered.push(`EVOLUTION_API_KEY=${key}`);
+      fs.writeFileSync(envPath, filtered.join('\n'));
+    } catch {}
+    res.json({ saved: true, url, key });
+  } catch (error) {
+    logger.error('Erro ao salvar config Evolution:', error);
+    res.status(500).json({ error: 'Erro ao salvar configuração' });
   }
 });
 

@@ -13,7 +13,7 @@ export abstract class BaseScraper {
     this.lotteryType = lotteryType;
   }
 
-  abstract scrape(html: string): Promise<LotteryResult>;
+  abstract scrape(html: string): Promise<any>;
 
   protected parseDate(dateStr: string): string {
     // Converte formato brasileiro para ISO
@@ -21,8 +21,7 @@ export abstract class BaseScraper {
     if (parts.length === 3 && parts[0] && parts[1] && parts[2]) {
       return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
     }
-    const dateStr = new Date().toISOString().split('T')[0];
-    return dateStr || new Date().toISOString().split('T')[0];
+    return new Date().toISOString().split('T')[0];
   }
 
   protected extractNumbers(text: string): string[] {
@@ -53,8 +52,7 @@ export abstract class BaseScraper {
   protected getYesterdayDate(): string {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const dateStr = yesterday.toISOString().split('T')[0];
-    return dateStr || new Date().toISOString().split('T')[0];
+    return yesterday.toISOString().split('T')[0];
   }
 
   protected logResult(result: LotteryResult): void {
