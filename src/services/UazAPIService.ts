@@ -206,9 +206,9 @@ export class UazAPIService {
 // Configuração da UazAPI
 export const createUazAPIService = (): UazAPIService => {
     const config: UazAPIConfig = {
-        baseUrl: process.env.UAZAPI_URL || 'https://api.uazapi.com',
-        apiToken: process.env.UAZAPI_TOKEN || '',
-        instanceId: process.env.UAZAPI_INSTANCE_ID
+        baseUrl: process.env.UAZAPI_URL || 'https://certcrm.uazapi.com',
+        apiToken: process.env.UAZAPI_TOKEN || 'lxtJjVGvfnExu13mL1BajqOAnIAPvrHTM3M9LQXMNOWdVCHLsn',
+        instanceId: process.env.UAZAPI_INSTANCE_ID || 'e685489a-c217-4b24-a0fb-fd364603a81e'
     };
 
     if (!config.apiToken) {
